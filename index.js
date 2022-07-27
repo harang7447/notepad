@@ -1,11 +1,3 @@
-const saveMemo = document.querySelector("#save")
-const writeMemo = document.querySelector("#write")
-const memoList = document.querySelector("#memolist")
-
-
-const memos = Array()
-
-
 function getDate(){ // YYYYMMDDHHMMSS
     const today = new Date()
 
@@ -28,44 +20,76 @@ function addMemo(){
     })
 }
 
-function deleteMemo(){
-    // memos 배열의 메모 삭제
-    
+function saveMemo(memo){
+    if (isAdd) addMemo();
+    else modifyMemo();
+    writeMemo.value = ""
 }
 
-function modifyMemo(modifiedText, memoIndex){
-    // memos 배열의 메모 수정
+function deleteMemo(deleteButtonId){
+    const targetDate = deleteButtonId.replace("del", "")
+    memos = memos.filter(memo => memo.date !== targetDate)
 }
 
+function loadModifyMemo(modifyButtonId){
+
+    isAdd = false; // 지금부터는 수정할것입니다.
+    modifyingDate = modifyButtonId.replace("mod", "")
+
+    // memos에서 modifyingDate와 date가 같은 요소를 찾고, 
+    // 그 친구의 text값을 writeMemo.value로 지정해주면 되겠죠?
+
+    // writeMemo.vale = memo.text
+
+}
+
+
+
+function modifyMemo(){
+
+    // modifyingDate와 Date가 같은 요소를 찾고,
+    // 이번에는 writeMemo.value로 그 친구의 text값을 지정해주면 
+
+    // memo.text = writeMemo.value
+
+
+
+    isAdd = true;
+}
 
 
 function renderMemos(){
-    const memoDivs = memos.map(memo => `<div id="memo${memo.date}">
-    <span>${memo.text}</span>
-    <br>
-    <button>삭제</button>
-    <button>수정</button>
+    const memoDivs = memos.map(memo =>`
+    <div id="memo${memo.date}">
+        <p>${memo.text}</p>
+        <button id="del${memo.date}" class="del">삭제</button>
+        <button id="mod${memo.date}" class="mod">수정</button>
     </div>`)
     memoList.innerHTML = memoDivs.join("")
+
+    const deleteButtons = document.querySelectorAll(".del")
+    const modifyButtons = document.querySelectorAll(".mod")
+
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.addEventListener("click", () => {deleteMemo(deleteButton.id); renderMemos();});
+    })
+
+    modifyButtons.forEach(modifyButton => {
+        modifyButton.addEventListener("click", () => {loadModifyMemo(modifyButton.id)})
+    })
 }
 
+const saveMemo = document.querySelector("#save")
+const writeMemo = document.querySelector("#write")
+const memoList = document.querySelector("#memolist")
+
+let memos = Array()
+let isAdd = true;
+let modifyingDate = undefined;
+
+saveMemo.addEventListener("click", () => {saveMemo(); renderMemos();})
 
 
-save.addEventListener("click", () => {addMemo(); renderMemos();})
-
-// 메모를 배열에 저장, div태그안에 목록추가
-
-
-
-// 2단계에 거쳐서 메모를 변경할 건데, 
-
-
-// 1. 배열에 메모를 추가, 수정, 삭제 하는 함수
-// 2. 현재 배열에 있는 메모를 화면에 출력하는 함수
-
-
-// savememo를 실행하면 array에 메모를 추가하고, array안에 들어가 있는 value를 HTML문서 상에 추가하는 것 (현재)
-
-// 메모를 추가하는 행위랑 메모를 출력하는 행위를 분리할거에요
-
-// 그래서? 메모를 추가하고 삭제하는 것은, 배열만 추가하고 삭제하면 자동으로 변하게끔 
+// 1. 수정 버튼을 누르면 textarea #write에 memo.text가 입력될거에요 
+// 2. text area에 수정할 메모를 입력하고 
+// 3. 저장버튼을 누르면 수정이 되는거죠. 
