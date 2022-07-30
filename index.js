@@ -20,7 +20,7 @@ function addMemo(){
     })
 }
 
-function saveMemo(memo){
+function saveAndModMemo(memo){
     if (isAdd) addMemo();
     else modifyMemo();
     writeMemo.value = ""
@@ -32,9 +32,13 @@ function deleteMemo(deleteButtonId){
 }
 
 function loadModifyMemo(modifyButtonId){
-
     isAdd = false; // 지금부터는 수정할것입니다.
     modifyingDate = modifyButtonId.replace("mod", "")
+    memos.forEach(memo => {
+        if(memo.date == modifyingDate){
+            writeMemo.value = memo.text
+        }
+    })
 
     // memos에서 modifyingDate와 date가 같은 요소를 찾고, 
     // 그 친구의 text값을 writeMemo.value로 지정해주면 되겠죠?
@@ -51,7 +55,7 @@ function modifyMemo(){
     // 이번에는 writeMemo.value로 그 친구의 text값을 지정해주면 
 
     // memo.text = writeMemo.value
-
+    
 
 
     isAdd = true;
@@ -75,7 +79,7 @@ function renderMemos(){
     })
 
     modifyButtons.forEach(modifyButton => {
-        modifyButton.addEventListener("click", () => {loadModifyMemo(modifyButton.id)})
+        modifyButton.addEventListener("click", () => {loadModifyMemo(modifyButton.id);})
     })
 }
 
@@ -87,8 +91,7 @@ let memos = Array()
 let isAdd = true;
 let modifyingDate = undefined;
 
-saveMemo.addEventListener("click", () => {saveMemo(); renderMemos();})
-
+saveMemo.addEventListener("click", () => {saveAndModMemo(); renderMemos();})
 
 // 1. 수정 버튼을 누르면 textarea #write에 memo.text가 입력될거에요 
 // 2. text area에 수정할 메모를 입력하고 
