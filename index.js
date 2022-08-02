@@ -55,8 +55,12 @@ function modifyMemo(){
     // 이번에는 writeMemo.value로 그 친구의 text값을 지정해주면 
 
     // memo.text = writeMemo.value
-    
 
+    memos.forEach(memo => {
+        if(memo.date == modifyingDate){
+            memo.text = writeMemo.value
+        }
+    })
 
     isAdd = true;
 }
@@ -65,7 +69,7 @@ function modifyMemo(){
 function renderMemos(){
     const memoDivs = memos.map(memo =>`
     <div id="memo${memo.date}">
-        <p>${memo.text}</p>
+        <p id="val${memo.date}">${memo.text}</p>
         <button id="del${memo.date}" class="del">삭제</button>
         <button id="mod${memo.date}" class="mod">수정</button>
     </div>`)
