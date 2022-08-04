@@ -8,8 +8,8 @@ function getDate(){ // YYYYMMDDHHMMSS
     const hour = today.getHours()
     const minute = today.getMinutes()
     const second = today.getSeconds()
-
-    return `${year}${month}${date}${hour}${minute}${second}`
+    const milliseconds = today.getMilliseconds()
+    return `${year}${month}${date}${hour}${minute}${second}${milliseconds}`
 }
 
 function addMemo(){
@@ -47,7 +47,14 @@ function loadModifyMemo(modifyButtonId){
 
 }
 
+function saveMemosToLocalstorage(){
+    localStorage.setItem("memos", JSON.stringify(memos))
+}
 
+function loadMemosFromLocalstorage(){
+    const tmp = localStorage.getItem("memos");
+    return JSON.parse(tmp ? tmp : "[]");
+}
 
 function modifyMemo(){
 
@@ -85,18 +92,20 @@ function renderMemos(){
     modifyButtons.forEach(modifyButton => {
         modifyButton.addEventListener("click", () => {loadModifyMemo(modifyButton.id);})
     })
+
+    saveMemosToLocalstorage()
 }
 
 const saveMemo = document.querySelector("#save")
 const writeMemo = document.querySelector("#write")
 const memoList = document.querySelector("#memolist")
 
-let memos = Array()
+let memos = loadMemosFromLocalstorage()
 let isAdd = true;
 let modifyingDate = undefined;
 
 saveMemo.addEventListener("click", () => {saveAndModMemo(); renderMemos();})
-
+renderMemos()
 // 1. 수정 버튼을 누르면 textarea #write에 memo.text가 입력될거에요 
 // 2. text area에 수정할 메모를 입력하고 
 // 3. 저장버튼을 누르면 수정이 되는거죠. 
