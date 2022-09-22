@@ -20,7 +20,7 @@ function addMemo(){
 }
 
 function loadModifyMemo(modifyButtonId){
-    isAdd = false; // 지금부터는 수정할것입니다.
+    isAdd = false // 지금부터는 수정할것입니다.
     modifyingDate = modifyButtonId.replace("mod", "")
     memos.forEach(memo => {
         if(memo.date == modifyingDate){
@@ -42,22 +42,22 @@ function modifyMemo(){
         }
     })
     
-    isAdd = true;
+    isAdd = true
 }
 
 function saveAndModMemo(memo){
     if (writeMemo.value != ""){
-        if (isAdd) addMemo();
-        else modifyMemo();
+        if (isAdd) addMemo()
+        else modifyMemo()
         writeMemo.value = ""
     }
     else{
-        warningMessage()
+        Message(warning)
     }
 }
 
-function warningMessage(){
-    warning.style.display = "block"
+function Message(string){
+    string.style.display = "block"
 }
 
 function deleteMemo(deleteButtonId){
@@ -73,9 +73,15 @@ function saveMemosToLocalstorage(){
 }
 
 function loadMemosFromLocalstorage(){
-    const tmp = localStorage.getItem("memos");
-    return JSON.parse(tmp ? tmp : "[]");
+    const tmp = localStorage.getItem("memos")
+    return JSON.parse(tmp ? tmp : "[]")
 }
+
+function moveMemo(){
+    
+}
+
+function importMemo(){}
 
 function renderMemos(){
     const memoDivs = memos.map(memo =>`
@@ -90,7 +96,7 @@ function renderMemos(){
     const modifyButtons = document.querySelectorAll(".mod")
 
     deleteButtons.forEach(deleteButton => {
-        deleteButton.addEventListener("click", () => {deleteMemo(deleteButton.id); renderMemos();});
+        deleteButton.addEventListener("click", () => {deleteMemo(deleteButton.id); renderMemos();})
     })
 
     modifyButtons.forEach(modifyButton => {
@@ -104,15 +110,23 @@ const saveMemo = document.querySelector("#save")
 const writeMemo = document.querySelector("#write")
 const memoList = document.querySelector("#memolist")
 const warning = document.querySelector("#warning")
-const off = document.querySelector("#off")
+const offButton = document.querySelector("#offButton")
+const moveMemoButton = document.querySelector("#moveMemoButton")
+const importMemoButton = document.querySelector("#importMemoButton")
 
 let memos = loadMemosFromLocalstorage()
-let isAdd = true;
-let modifyingDate = undefined;
+let isAdd = true
+let modifyingDate = undefined
 
 saveMemo.addEventListener("click", () => {saveAndModMemo(); renderMemos();})
-off.addEventListener("click", () => {warning.style.display = "none"})
+offButton.addEventListener("click", () => {warning.style.display = "none"})
+moveMemoButton.addEventListener("click", () => {moveMemo()})
+importMemoButton.addEventListener("click", () => {importMemo(); renderMemos()})
+
 renderMemos()
 // 1. 수정 버튼을 누르면 textarea #write에 memo.text가 입력될거에요 
 // 2. text area에 수정할 메모를 입력하고 
 // 3. 저장버튼을 누르면 수정이 되는거죠.
+// 부트스트랩으로 메모삭제 경고메세지, 메모 옮기기메세만들기
+// 추가해야할 기능 휴지통, 설정
+// 휴지통 30일 뒤에 메모 완전 삭제, 설정 언어, 메모삭제 메세지등등, 메모 저정했을 때 메모내역이 없으면 경고뜨는것 등 설정헤제, 설정 별표 친 메모는 삭제불가
